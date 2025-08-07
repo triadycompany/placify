@@ -14,6 +14,9 @@
     "categories": {
       "auth": {
         "placify52c750b1": {}
+      },
+      "storage": {
+        "placifyFiles": {}
       }
     }
   }

@@ -1,0 +1,14 @@
+{
+  "resourceName": "placifyFiles",
+  "policyUUID": "4ba6dbb0",
+  "bucketName": "placifybucket",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
