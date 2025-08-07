@@ -1,0 +1,86 @@
+CC SEE Lab steps
+
+1 install nodejs and npm  (install from website)
+  sudo apt install nodejs npm -y
+
+2 install amplify cli 
+ npm cache clean --force
+ npm install -g @aws-amplify/cli
+
+3  create iam user
+   and create access keys
+
+4 amplify initialise now
+  amplify init
+  enter the required details like access id and secret access  key id and region
+
+5 Add Cognito Authentication
+  amplify add auth
+  default config
+  email
+  done
+  
+
+6 deploy the authentication backend to AWS now.
+  amplify push
+  
+7 Integrate Cognito Auth in Your React App
+  npm install aws-amplify @aws-amplify/ui-react
+
+8 run react project
+  npm run dev
+  
+9 create EC2
+
+10 create RDS db
+
+11 got to rds and connect ec2 to it
+  
+11 connect ec2 
+  clone the git repoor
+  git clone https://github.com/gallant-giri/placify.git 
+  sudo apt update
+  sudo apt install nodejs npm -y
+  sudo apt install mysql-client -y
+  npm install express
+
+12 creating db schema
+  CREATE DATABASE IF NOT EXISTS placify;
+  USE placify;
+  CREATE TABLE experiences (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id VARCHAR(255),
+  company VARCHAR(255),
+  role VARCHAR(255),
+  description TEXT,
+  file_key VARCHAR(512),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  ); 
+
+
+13 creating .env in backend
+  DB_HOST=
+  DB_USER=placify 
+  DB_PASSWORD=your password
+  DB_NAME=placify
+  PORT=4000
+  
+  and also in front end create .env and set VITE_API_BASE_URL  
+
+14 run backend server
+  node index.js
+
+15 to check working or not
+  http://EC2-public-ip/api/experiences
+  if still not working create elastic ip , associate it and give that
+
+
+16 for file uploads
+  amplify add storage
+  amplify push
+
+
+
+
+
+
